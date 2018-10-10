@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>bokbulbok</title>
+</head>
+<body>
+<style>
+    .sample {
+        width: 100px;
+        height: 100px;
+        background-color: steelblue;
+        color: ghostwhite;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -50px;
+        margin-left: -50px;
+        text-align: center;
+        font-size: 0.5em;
+        transition-duration: 3s;
+
+    }
+
+    .big {
+        transform: scale(2) rotateY(360deg) rotateX(360deg);
+    }
+</style>
+
+<button id="showBtn">SHOW</button>
+<button id="hideBtn">HIDE</button>
+
+
+<div class="sample">
+    Sample
+</div>
+<!--jquery 다음에 .min이라고 붙어있으면 컴프레스 -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+
+        var sample = $(".sample");
+
+
+        $.getJSON("http://10.10.10.95:8080/jsonEx/quiz", (result) => {
+            console.log(result);
+
+            sample.html(result.name).addClass("big");
+
+        });
+
+    });
+
+</script>
+</body>
+</html>

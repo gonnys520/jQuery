@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax ID 중복체크</title>
+</head>
+<body>
+<style>
+    .spinner {
+        position: absolute;
+        width: 50px;
+        height: 50px;
+    }
+
+    .form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+</style>
+<form class="form" action="http://www.naver.com">
+
+    <div>
+        ID <input type="text" name="uid" value="AAA">
+        <span class="msg"></span>
+        <button id="checkBtn">중복체크</button>
+    </div>
+    <div>
+        Password <input type="password" name="upw">
+    </div>
+    <div>
+        E-mail <input type="text" name="email">
+    </div>
+    <div>
+        <button>BTN</button>
+    </div>
+
+<br><br>
+    <img class="spinner" src="spinner.gif">
+</form>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script>
+    $(document).ready(function () {
+
+        //jquery prevent submit
+        $("form").submit(function (e) {
+            e.preventDefault();
+            console.log("button clicked....");
+
+            var obj = {};
+            obj.uid = $("input[name='uid']").val();
+            obj.upw = $("input[name='upw']").val();
+            obj.email = $("input[name='email']").val();
+
+            //jquery ajax send post
+            $.post("http://10.10.10.95:8080/jsonEx/join",obj, function (text) {
+                alert(text);
+            });
+        });
+
+
+        $("#checkBtn").on("click", (e) => {
+            /*버블링이나 캡쳐링을 막기위해서는 preventDefault와 stopPropagation은 반드시 기억할 것*/
+            e.preventDefault();
+            e.stopPropagation();
+
+            $(".spinner").show("slow");
+
+            var input = $("input[name = 'uid']");
+            var userInput = input.val();
+            console.log(input.val());
+
+            $.ajax({
+                url: "http://10.10.10.95:8080/jsonEx/",
+                data: {str: userInput, pw: "1234"},
+                success: function (result) {
+                    console.log(result);
+                    if (result == 'Yes') {
+                        $(".msg").html("해당 아이디는 사용 가능합니다.");
+                        $(".spinner").hide("slow");
+                    } else {
+                        alert("사용 불가한 아이디입니다. 아이디를 변경하세요");
+                    }
+                    $(".spinner").hide("slow");
+
+                    setTimeout(() => {
+
+                    }, 2000);
+                }
+            });
+        });
+    });
+
+</script>
+</body>
+</html>
